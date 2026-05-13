@@ -976,7 +976,7 @@ ${items}
                   <button
                     type="button"
                     onClick={createManualLink}
-                    disabled={creatingManualLink || deletingLinks || generatingLinks}
+                    disabled={creatingManualLink}
                     className="inline-flex shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white text-sm font-semibold px-4 py-2.5 hover:bg-emerald-700 disabled:opacity-50 sm:w-28"
                     title="Add this link to your account"
                   >
@@ -1411,7 +1411,7 @@ ${items}
                                   <select
                                     value={pid}
                                     onChange={(e) => setProfileForLinkIds({ ids: [row.key], profileId: e.target.value })}
-                                    disabled={deletingLinks || generatingLinks || updatingProfileLinkIds.includes(String(row.key))}
+                                    disabled={deletingLinks || updatingProfileLinkIds.includes(String(row.key))}
                                     className={`w-full max-w-[170px] cursor-pointer appearance-none border rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 [&::-ms-expand]:hidden ${cls}`}
                                     title={hasProfile ? 'Profile selected' : 'No profile selected'}
                                   >
