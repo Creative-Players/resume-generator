@@ -90,7 +90,7 @@ const EXECUTIVE_HANDLEBARS_HTML = `<!DOCTYPE html>
       <section>
         <h2>Certifications</h2>
         {{#each certifications}}
-        <div class="cert"><strong>{{name}}</strong>{{#if issuer}} &mdash; {{issuer}}{{/if}}</div>
+        <div class="cert">{{#if link_href}}<a href="{{link_href}}"><strong>{{name}}</strong></a>{{else}}<strong>{{name}}</strong>{{/if}}{{#if issuer}} &mdash; {{issuer}}{{/if}}</div>
         {{/each}}
       </section>
       {{/if}}
@@ -113,6 +113,7 @@ const EXECUTIVE_BASE_CSS = `
   .title { margin: 6px 0 10px; font-size: 11.5pt; font-weight: 700; color: #111827; }
   .contact-row { display: flex; flex-wrap: wrap; gap: 10px 14px; font-size: 9.5pt; color: #374151; }
   .contact-row a { color: #111827; text-decoration: none; border-bottom: 1px solid #D1D5DB; }
+  .cert a { color: #111827; text-decoration: none; border-bottom: 1px solid #D1D5DB; }
   section { margin: 12px 0; }
   h2 { margin: 0 0 6px; font-size: 11pt; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; }
   .summary { margin: 0; font-size: 10pt; line-height: 1.5; color: #111827; }
@@ -206,7 +207,7 @@ const CLASSIC_HANDLEBARS_HTML = `<!DOCTYPE html>
   <div class="section">
     <div class="section-title">Certifications</div>
     {{#each certifications_classic}}
-    <p class="cert-row"><span class="cert-name">{{name}}</span>{{#if meta}} <span class="cert-meta">— {{meta}}</span>{{/if}}</p>
+    <p class="cert-row">{{#if link_href}}<a class="cert-name" href="{{link_href}}">{{name}}</a>{{else}}<span class="cert-name">{{name}}</span>{{/if}}{{#if meta}} <span class="cert-meta">— {{meta}}</span>{{/if}}</p>
     {{/each}}
   </div>
   {{/if}}
@@ -261,6 +262,7 @@ const CLASSIC_HANDLEBARS_CSS = `
   .edu-degree { font-size: 9.5pt; color: #2c2c2c; margin-top: 1px; }
   .cert-row { font-size: 9.5pt; margin-bottom: 4px; }
   .cert-name { font-weight: bold; color: #1a3a5c; }
+  .cert-row a.cert-name { text-decoration: underline; color: #2e86c1; }
   .cert-meta { color: #666666; }
   .ats-inline { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; font-size: 1px; color: white; }
 `;
@@ -293,6 +295,7 @@ const EXECUTIVE_COLOR_CSS_EXTRA = `
     font-weight: 700;
   }
   .cert { color: var(--text); }
+  .cert a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(46, 134, 193, 0.35); }
 `;
 
 module.exports = {

@@ -13,7 +13,7 @@ import { profileRefToIdString } from '../utils/profileRef.js';
 
 const EMPTY_WORK = { company: '', role: '', startDate: '', endDate: '', current: false };
 const EMPTY_EDU = { institution: '', degree: '', field: '', startYear: '', endYear: '' };
-const EMPTY_CERT = { name: '', issuer: '', year: '' };
+const EMPTY_CERT = { name: '', issuer: '', year: '', link: '' };
 
 function defaultCvGeneration() {
   return {
@@ -530,6 +530,9 @@ export default function ProfilePage() {
                         <input type="text" placeholder="Year" value={cert.year}
                           onChange={(e) => updateCert(i, 'year', e.target.value)}
                           className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent" />
+                        <input type="text" placeholder="Credential / verification URL (optional)" value={cert.link || ''}
+                          onChange={(e) => updateCert(i, 'link', e.target.value)}
+                          className="md:col-span-3 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent" />
                       </div>
                       <button type="button" onClick={() => removeCert(i)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
                     </div>

@@ -1,5 +1,6 @@
 const Handlebars = require('handlebars');
 const { buildMetadata } = require('./resumeMetadata');
+const { certificationAbsUrl } = require('../utils/certificationUrl');
 
 function htmlEscapeWithBold(value) {
   const s = String(value ?? '');
@@ -112,11 +113,13 @@ function buildResumeViewModel(cvData, profile) {
     name: c.name,
     issuer: c.issuer || '',
     year: c.year || '',
+    link_href: certificationAbsUrl(c.link),
   }));
 
   const certifications_classic = (Array.isArray(p.certifications) ? p.certifications : []).map((c) => ({
     name: c.name,
     meta: [c.issuer, c.year].filter(Boolean).join(', '),
+    link_href: certificationAbsUrl(c.link),
   }));
 
   const contact_line = [p.email, p.phone, p.location, p.linkedin, p.github, p.website]

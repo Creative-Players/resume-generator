@@ -3,6 +3,7 @@
  * or for backward compatibility with old `built_in` kinds.
  */
 const { buildMetadata } = require('./resumeMetadata');
+const { certificationAbsUrl } = require('../utils/certificationUrl');
 
 function htmlEscape(s) {
   return String(s ?? '')
@@ -152,10 +153,14 @@ function buildExecutiveHtml(cvData, profile) {
       <section>
         <h2>Certifications</h2>
         ${certifications
-          .map(
-            (c) => `
-        <div class="cert"><strong>${htmlEscape(c.name)}</strong>${c.issuer ? ` &mdash; ${htmlEscape(c.issuer)}` : ''}</div>`
-          )
+          .map((c) => {
+            const href = certificationAbsUrl(c.link);
+            const nameHtml = href
+              ? `<a href="${htmlEscape(href)}"><strong>${htmlEscape(c.name)}</strong></a>`
+              : `<strong>${htmlEscape(c.name)}</strong>`;
+            return `
+        <div class="cert">${nameHtml}${c.issuer ? ` &mdash; ${htmlEscape(c.issuer)}` : ''}</div>`;
+          })
           .join('')}
       </section>`
     : '';
@@ -181,6 +186,7 @@ function buildExecutiveHtml(cvData, profile) {
   .title { margin: 6px 0 10px; font-size: 11.5pt; font-weight: 700; color: #111827; }
   .contact-row { display: flex; flex-wrap: wrap; gap: 10px 14px; font-size: 9.5pt; color: #374151; }
   .contact-row a { color: #111827; text-decoration: none; border-bottom: 1px solid #D1D5DB; }
+  .cert a { color: #111827; text-decoration: none; border-bottom: 1px solid #D1D5DB; }
   section { margin: 12px 0; }
   h2 { margin: 0 0 6px; font-size: 11pt; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; }
   .summary { margin: 0; font-size: 10pt; line-height: 1.5; color: #111827; }
@@ -308,8 +314,12 @@ function renderBuiltInHtml(cvData, profile) {
     ? certifications
         .map((c) => {
           const certMeta = [c.issuer, c.year].filter(Boolean).join(', ');
-          return `<p class="cert-row"><span class="cert-name">${c.name}</span>${
-            certMeta ? ` <span class="cert-meta">— ${certMeta}</span>` : ''
+          const href = certificationAbsUrl(c.link);
+          const nameHtml = href
+            ? `<a class="cert-name" href="${htmlEscape(href)}">${htmlEscape(c.name)}</a>`
+            : `<span class="cert-name">${htmlEscape(c.name)}</span>`;
+          return `<p class="cert-row">${nameHtml}${
+            certMeta ? ` <span class="cert-meta">— ${htmlEscape(certMeta)}</span>` : ''
           }</p>`;
         })
         .join('')
@@ -374,6 +384,7 @@ function renderBuiltInHtml(cvData, profile) {
   .edu-degree { font-size: 9.5pt; color: #2c2c2c; margin-top: 1px; }
   .cert-row { font-size: 9.5pt; margin-bottom: 4px; }
   .cert-name { font-weight: bold; color: ${theme.primary}; }
+  .cert-row a.cert-name { text-decoration: underline; color: ${theme.accent}; }
   .cert-meta { color: ${theme.light}; }
 </style>
 </head>

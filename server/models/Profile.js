@@ -12,6 +12,7 @@ const CertificationSchema = new mongoose.Schema({
   name: { type: String, required: true },
   issuer: { type: String, default: '' },
   year: { type: String, default: '' },
+  link: { type: String, default: '' },
 }, { _id: false });
 
 const WorkExperienceSchema = new mongoose.Schema({

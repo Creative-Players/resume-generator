@@ -3,6 +3,7 @@ const {
   Packer,
   Paragraph,
   TextRun,
+  ExternalHyperlink,
   HeadingLevel,
   AlignmentType,
   BorderStyle,
@@ -16,6 +17,8 @@ const {
   WidthType,
   VerticalAlign,
 } = require('docx');
+
+const { certificationAbsUrl } = require('../utils/certificationUrl');
 
 const COLORS = {
   primary: '1A3A5C',
@@ -239,11 +242,27 @@ async function generateDocx(cvData, profile, options = {}) {
     certSection.push(sectionHeading('Certifications', theme));
     for (const cert of certifications) {
       const meta = [cert.issuer, cert.year].filter(Boolean).join(', ');
+      const href = certificationAbsUrl(cert.link);
+      const nameRun = href
+        ? new ExternalHyperlink({
+            children: [
+              new TextRun({
+                text: cert.name,
+                bold: true,
+                size: 19,
+                color: theme.primary,
+                font: 'Calibri',
+                style: 'Hyperlink',
+              }),
+            ],
+            link: href,
+          })
+        : new TextRun({ text: cert.name, bold: true, size: 19, color: theme.primary, font: 'Calibri' });
       certSection.push(
         new Paragraph({
           spacing: { before: 80, after: 40 },
           children: [
-            new TextRun({ text: cert.name, bold: true, size: 19, color: theme.primary, font: 'Calibri' }),
+            nameRun,
             ...(meta ? [new TextRun({ text: `  — ${meta}`, size: 18, color: theme.light, font: 'Calibri' })] : []),
           ],
         })

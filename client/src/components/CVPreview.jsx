@@ -169,9 +169,22 @@ export default function CVPreview({ cvData, profile }) {
           <div className="space-y-1">
             {profile.certifications.map((cert, i) => {
               const meta = [cert.issuer, cert.year].filter(Boolean).join(', ');
+              const raw = String(cert.link || '').trim();
+              const href = raw && (/^https?:\/\//i.test(raw) ? raw : `https://${raw.replace(/^\/+/, '')}`);
               return (
                 <p key={i} className="text-sm">
-                  <span className="font-semibold text-primary">{cert.name}</span>
+                  {href ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-primary underline decoration-accent/60 hover:decoration-accent"
+                    >
+                      {cert.name}
+                    </a>
+                  ) : (
+                    <span className="font-semibold text-primary">{cert.name}</span>
+                  )}
                   {meta && <span className="text-gray-500"> — {meta}</span>}
                 </p>
               );
